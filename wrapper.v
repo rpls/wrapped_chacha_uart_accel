@@ -3,7 +3,7 @@
     `define MPRJ_IO_PADS 38    
 `endif
 // update this to the name of your module
-module wrapped_project(
+module wrapped_chacha_uart_accel(
 `ifdef USE_POWER_PINS
     inout vdda1,	// User area 1 3.3V supply
     inout vdda2,	// User area 2 3.3V supply
@@ -77,6 +77,13 @@ module wrapped_project(
     // Instantiate your module here, 
     // connecting what you need of the above signals. 
     // Use the buffered outputs for your module's outputs.
+    chacha_uart_accel accel(.clk(wb_clk_i),
+                            .reset(la_data_in[0]),
+                            .div_valid(la_data_in[1]),
+                            .div_payload(la_data_in[21:2]),
+                            .uart_txd(buf_io_out[9]),
+                            .uart_rxd(io_in[8])
+                            );
 
 endmodule 
 `default_nettype wire

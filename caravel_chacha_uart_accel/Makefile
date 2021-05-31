@@ -36,11 +36,11 @@ PDK_PATH?=/ef/tech/SW/sky130A
 SIM?=RTL
 
 # include the modules that cocotb needs for test
-export PYTHONPATH := $(UPRJ_RTL_PATH)/wrapped_project/project/test
+export PYTHONPATH := $(UPRJ_RTL_PATH)/chacha_uart_accel
 
 .SUFFIXES:
 
-PATTERN = project
+PATTERN = chacha_uart_accel
 
 all:  coco_test
 
@@ -49,12 +49,11 @@ hex:  ${PATTERN:=.hex}
 coco_test: ${PATTERN}.hex
 	rm -rf sim_build/
 	mkdir sim_build/
-	iverilog -o sim_build/sim.vvp -s project_tb project_tb.v -DSIM -DFUNCTIONAL \
+	iverilog -o sim_build/sim.vvp -s chacha_uart_accel_tb chacha_uart_accel_tb.v -DSIM -DFUNCTIONAL \
 	-I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) \
 	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH)
-	
-	MODULE=test_project vvp -M $$(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus sim_build/sim.vvp
+	MODULE=test_chacha_uart_accel vvp -M $$(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus sim_build/sim.vvp -fst
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)
@@ -80,7 +79,6 @@ test:
 
 %.hex: %.elf
 	${GCC_PATH}/${GCC_PREFIX}-objcopy -O verilog $< $@ 
-	# to fix flash base address
 	sed -i 's/@10000000/@00000000/g' $@
 
 %.bin: %.elf

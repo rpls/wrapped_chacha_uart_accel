@@ -23,6 +23,8 @@
 		- Observes counter value through the MPRJ lower 8 IO pins (in the testbench)
 */
 
+#define USER_ID 2
+
 void main()
 {
 	/* 
@@ -54,11 +56,12 @@ void main()
     // activate the project by setting the 1st bit of 2nd bank of LA - depends on the project ID
     reg_la1_iena = 0; // input enable off
     reg_la1_oenb = 0; // output enable on
-    reg_la1_data = 1 << 1;
+    reg_la1_data = 1 << USER_ID;
 
-    // do something with the logic analyser
+    // reset design with 0bit of 1st bank of LA
     reg_la0_iena = 0;
     reg_la0_oenb = 0;
-    reg_la0_data |= 100;
+    reg_la0_data = 1;
+    reg_la0_data = 0;
 }
 
