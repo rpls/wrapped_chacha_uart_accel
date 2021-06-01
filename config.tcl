@@ -8,8 +8,9 @@ set ::env(DESIGN_NAME) wrapped_chacha_uart_accel
 set ::env(VERILOG_FILES) "$::env(DESIGN_DIR)/wrapper.v $::env(DESIGN_DIR)/chacha_uart_accel/chacha_uart_accel.v"
 
 # target density, change this if you can't get your design to fit
-set ::env(PL_TARGET_DENSITY) 0.54
-set ::env(CELL_PAD) 2
+set ::env(PL_TARGET_DENSITY) "0.54"
+set ::env(CELL_PAD) "1"
+set ::env(GLB_RT_MAX_DIODE_INS_ITERS) "5"
 set ::env(SYNTH_STRATEGY) "AREA 2"
 
 # set absolute size of the die to 300 x 300 um
