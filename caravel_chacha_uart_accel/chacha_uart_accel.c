@@ -23,7 +23,7 @@
 		- Observes counter value through the MPRJ lower 8 IO pins (in the testbench)
 */
 
-#define USER_ID 2
+#define USER_ID 9
 #define TEST_FREQ 40000000l
 /* #define TEST_BAUD 115200l */
 #define TEST_BAUD 5000000l /* Insane should be ok for simulator (largest freqency possible is FREQ / 8) */

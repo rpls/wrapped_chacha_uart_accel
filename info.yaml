@@ -12,7 +12,7 @@ project:
 caravel_test:
   recipe: "coco_test"
   directory: "caravel_chacha_uart_accel"
-  id: 2
+  id: 9
   module_name: "wrapped_chacha_uart_accel"
   instance_name: "wrapped_chacha_uart_accel"
 
