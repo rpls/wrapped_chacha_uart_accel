@@ -24,6 +24,9 @@
 */
 
 #define USER_ID 2
+#define TEST_FREQ 40000000l
+/* #define TEST_BAUD 115200l */
+#define TEST_BAUD 5000000l /* Insane should be ok for simulator (largest freqency possible is FREQ / 8) */
 
 void main()
 {
@@ -62,6 +65,10 @@ void main()
     reg_la0_iena = 0;
     reg_la0_oenb = 0;
     reg_la0_data = 1;
+    reg_la0_data = 0;
+
+    // Set the Uart Baud Rate (div = freq / baud / numsamplesperbit and update bit)
+    reg_la0_data = ((TEST_FREQ / TEST_BAUD / 8) - 1) << 2 | 1 << 1;
     reg_la0_data = 0;
 }
 

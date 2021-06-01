@@ -36,7 +36,7 @@ PDK_PATH?=/ef/tech/SW/sky130A
 SIM?=RTL
 
 # include the modules that cocotb needs for test
-export PYTHONPATH := $(UPRJ_RTL_PATH)/chacha_uart_accel
+export PYTHONPATH := $(UPRJ_RTL_PATH)/wrapped_chacha_uart_accel/chacha_uart_accel
 
 .SUFFIXES:
 
@@ -53,7 +53,7 @@ coco_test: ${PATTERN}.hex
 	-I $(PDK_PATH) \
 	-I $(CARAVEL_BEHAVIOURAL_MODELS) -I $(CARAVEL_RTL_PATH) \
 	-I $(UPRJ_BEHAVIOURAL_MODELS)    -I $(UPRJ_RTL_PATH)
-	MODULE=test_chacha_uart_accel vvp -M $$(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus sim_build/sim.vvp -fst
+	MODULE=test_chacha_uart_accel_wrapper vvp -M $$(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus sim_build/sim.vvp -fst
 
 %.vvp: %_tb.v %.hex
 ifeq ($(SIM),RTL)

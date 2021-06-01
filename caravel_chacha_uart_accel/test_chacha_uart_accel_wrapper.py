@@ -2,6 +2,8 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, ClockCycles, with_timeout
 
+from test_chacha_uart_accel import test_permutation
+
 @cocotb.test()
 async def test_start(dut):
     clock = Clock(dut.clk, 25, units="ns") # 40M
@@ -25,12 +27,13 @@ async def test_start(dut):
     await ClockCycles(dut.clk, 80)
     dut.RSTB <= 1
 
+    dut.accel_rxd <= 1
+
     # wait with a timeout for the project to become active
     await with_timeout(RisingEdge(dut.uut.mprj.wrapped_chacha_uart_accel.active), 180, 'us')
 
     # wait
     await ClockCycles(dut.clk, 6000)
 
-    # assert something
-    assert(0 == 25)
+    await test_permutation(dut.accel_rxd, dut.accel_txd, 5000000)
 

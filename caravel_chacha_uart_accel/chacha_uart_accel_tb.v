@@ -37,7 +37,9 @@ module chacha_uart_accel_tb;
     wire [37:0] mprj_io;
 
     ///// convenience signals that match what the cocotb test modules are looking for
-
+    wire accel_txd, accel_rxd;
+    assign accel_txd = mprj_io[9];
+    assign mprj_io[8] = accel_rxd;
 
     /////
 

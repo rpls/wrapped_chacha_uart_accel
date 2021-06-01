@@ -49,20 +49,24 @@ async def reset(dut):
     await ClockCycles(dut.clk, 20)
 
 
-async def test_permutation(dut, baud=115200):
+async def test_permutation(dut_rxd, dut_txd, baud=115200):
     chacha_in = [random.getrandbits(32) for i in range(16)]
     chacha_out_ref = chacha20(chacha_in)
     chacha_in_bytes = struct.pack("<" + "I"*16, *chacha_in)
     print(f"Output len: {len(chacha_in_bytes)}")
-    uart_source = UartSource(dut.uart_rxd, baud=baud, bits=8)
-    uart_sink = UartSink(dut.uart_txd, baud=baud, bits=8)
+    uart_source = UartSource(dut_rxd, baud=baud, bits=8)
+    uart_sink = UartSink(dut_txd, baud=baud, bits=8)
     recv = bytearray()
     uart_source.write_nowait(chacha_in_bytes)
     while len(recv) < 64:
+        await uart_sink.wait(1, 'ms')
+        assert uart_sink.count() > 0, "Do data after timeout!"
         recv.extend(await uart_sink.read())
     recv = bytearray()
     uart_source.write_nowait(chacha_in_bytes)
     while len(recv) < 64:
+        await uart_sink.wait(1, 'ms')
+        assert uart_sink.count() > 0, "Do data after timeout!"
         recv.extend(await uart_sink.read())
     chacha_out = struct.unpack("<" + "I"*16, recv)
     assert all(out == ref for out, ref in zip(chacha_out, chacha_out_ref))
@@ -85,7 +89,7 @@ async def test_uart_accel(dut):
     while dut.uart_txd != 1:
         await clkEdge
     # Test with the default bitrate
-    await test_permutation(dut)
+    await test_permutation(dut.uart_rxd, dut.uart_txd)
     # Test switching the baudrate
     newbaud = 38600
     if hasattr(dut, "div_valid"):
@@ -97,5 +101,5 @@ async def test_uart_accel(dut):
         await clkEdge
         dut.div_valid <= 0
         await clkEdge
-        await test_permutation(dut, newbaud)
+        await test_permutation(dut.uart_rxd, dut.uart_txd, newbaud)
 
