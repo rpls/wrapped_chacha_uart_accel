@@ -22,6 +22,11 @@ flag is high.
 
 ![Image of the core](docs/core.png)
 
+# Requirements
+
+- All the requirements for [multi project tools](https://github.com/mattvenn/multi_project_tools)
+- The [cocotb](https://github.com/cocotb/cocotb) testbenches utilize the [cocotbext-uart](https://github.com/alexforencich/cocotbext-uart), which I have included in this repository.
+
 # License
 
 This project is [licensed under Apache 2](LICENSE)
